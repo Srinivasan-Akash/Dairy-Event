@@ -1,0 +1,228 @@
+.hero-section {
+  position: relative;
+  padding-bottom: 2em;
+
+  .gradient {
+   width: 100%;
+   height: 100%;
+   position: absolute;
+   background: linear-gradient(50deg, #fff, #FFEDAD);
+   z-index: -1;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 80rem;
+    margin: auto;
+    padding: 1em 0;
+
+    img {
+      height: 45px;
+    }
+
+    ul {
+      list-style-type: none;
+      display: flex;
+      gap: 2em;
+
+      li {
+        font-size: 1rem;
+        font-family: "Poppins";
+      }
+    }
+
+    button {
+      background: #ef4444;
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.5em 1em;
+      font-family: "Poppins";
+      gap: 0.5em;
+      cursor: pointer;
+      border: 2px solid #000;
+      border-radius: 5px;
+      position: relative;
+      img:first-child {
+        width: 15px;
+        height: auto;
+      }
+
+      img:last-child {
+        position: absolute;
+        top: 150%;
+        left: 25%;
+        width: 120%;
+        height: auto;
+      }
+    }
+  }
+
+  main {
+    max-width: 80rem;
+    margin: auto;
+    margin-top: 3em;
+
+    h1 {
+      font-size: 3.5rem;
+      font-family: "Poppins";
+      text-align: center;
+
+      span {
+        color: #ef4444;
+      }
+    }
+
+    p {
+      text-align: center;
+      font-size: 1.5rem;
+      font-family: "Poppins";
+    }
+
+    .calender-logos {
+      background: #fff;
+      border-radius: 100px;
+      border: 2px solid #000;
+      display: flex;
+      align-items: center;
+      padding: 0.5em;
+      max-width: 35rem;
+      margin: auto;
+      margin-top: 1em;
+      justify-content: space-around;
+
+      .dot {
+        width: 15px;
+        height: 15px;
+        background: #000;
+        border-radius: 100px;
+      }
+
+      .calender {
+        display: flex;
+        align-items: center;
+        gap: 1em;
+
+        .google {
+          width: 35px;
+        }
+
+        .apple {
+          width: 30px;
+          transform: translateY(-5%);
+        }
+
+        .outlook {
+          width: 35px;
+        }
+
+        h2 {
+          font-family: "Poppins";
+          font-weight: 400;
+          font-size: 1.2rem;
+        }
+      }
+    }
+
+    .banner {
+      max-width: 80rem;
+      width: 100%;
+      height: 44rem;
+      border: 5px solid #000;
+      margin-top: 2em;
+      border-radius: 1em;
+      overflow: hidden;
+      display: flex;
+
+      .left {
+        width: 50%;
+        height: 100%;
+        border-right: 5px solid #000;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .right {
+        width: 50%;
+        height: fit-content;
+        .form {
+          width: 100%;
+          padding: 2em;
+
+          button {
+            background: #000;
+            color: #fff;
+            padding: 0.8em;
+            width: 100%;
+            font-size: 1rem;
+            font-family: "Poppins";
+            border-radius: 0.5em;
+            cursor: pointer;
+          }
+
+          .link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5em 1em;
+            font-size: 1rem;
+            width: 100%;
+            font-family: "Space Grotesk";
+            border-radius: 0.25em;
+            border: none;
+            outline: none;
+            margin-top: 0.25em;
+            border: 1px solid rgb(0, 0, 0);
+            span {
+              margin-right: 0.25em;
+            }
+
+            input {
+              border: none !important;
+              padding: 0 !important;
+            }
+          }
+
+          .dual {
+            display: flex;
+            gap: 1em;
+          }
+
+          .input {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            label {
+              font-family: "Space Grotesk";
+              font-weight: 700;
+              font-size: 0.9rem;
+            }
+
+            textarea {
+              min-height: 12vh;
+              resize: vertical;
+            }
+
+            input,
+            textarea {
+              padding: 0.5em 1em;
+              font-size: 1rem;
+              width: 100%;
+              font-family: "Space Grotesk";
+              border-radius: 0.25em;
+              border: none;
+              outline: none;
+              margin-top: 0.25em;
+              border: 1px solid rgb(0, 0, 0);
+            }
+          }
+        }
+      }
+    }
+  }
+}
