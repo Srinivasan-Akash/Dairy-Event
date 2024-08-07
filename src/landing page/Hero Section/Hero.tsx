@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import JSConfetti from "js-confetti";
 import "./Hero.scss";
 import Logo from "../../assets/home page/logo.png";
@@ -16,34 +16,85 @@ export default function Hero() {
     eventStartTime: "",
     eventEndTime: "",
     eventLocation: "",
-    eventTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    eventTimezone: "",
     meetingLink: "",
     eventDescription: "",
     customMeetingLink: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [eventLink, setEventLink] = useState("");
   const [jsConfetti] = useState(new JSConfetti());
+
+  useEffect(() => {
+    const fetchTimezone = async () => {
+      try {
+        const response = await fetch("http://worldtimeapi.org/api/ip");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setFormData((prevData) => ({ ...prevData, eventTimezone: data.timezone }));
+      } catch (error) {
+        console.error("Error fetching timezone:", error);
+      }
+    };
+
+    fetchTimezone();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // Trigger confetti
-    jsConfetti.addConfetti({
-      confettiColors: ['#FF0000', '#00FF00', '#0000FF'], // Adjust colors if needed
-      confettiRadius: 6, // Size of the confetti pieces
-      confettiNumber: 500, // Number of confetti pieces
-      confettiLifetime: 0.7, // Duration of the confetti (in seconds)
-    });
-    // Show thank you message
-    setSubmitted(true);
-    // Scroll to top of the page
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setLoading(true);
+
+    const eventPayload = {
+      title: formData.eventTitle,
+      start: formData.eventStartTime,
+      end: formData.eventEndTime,
+      description: formData.eventDescription,
+      timezone: formData.eventTimezone,
+      location: formData.eventLocation,
+    };
+
+    try {
+      console.log(eventPayload);
+      const response = await fetch("https://calndr.link/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventPayload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      setEventLink(result.links.event_page);
+      setLoading(false);
+      setSubmitted(true);
+
+      // Trigger confetti
+      jsConfetti.addConfetti({
+        confettiColors: ['#FF0000', '#00FF00', '#0000FF'], // Adjust colors if needed
+        confettiRadius: 6, // Size of the confetti pieces
+        confettiNumber: 500, // Number of confetti pieces
+      });
+
+      // Scroll to top of the page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (error) {
+      console.error("Error creating event:", error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -95,18 +146,14 @@ export default function Hero() {
                 <h2 className="title">Copy Your Calendar Link</h2>
                 <p className="desc">Share your event landing page on social media.</p>
                 <div className="final-link">
-                  <h2>https://cal.et/oqous8eb</h2>
-                  <button>Copy Link</button>
+                  <h2>{eventLink}</h2>
+                  <button onClick={() => navigator.clipboard.writeText(eventLink)}>Copy Link</button>
                 </div>
                 <div className="or-component">
                   <div className="line"></div>
                   <span>Direct Links</span>
                   <div className="line"></div>
                 </div>
-
-               
-
-                  
               </div>
             ) : (
               <form className="form" onSubmit={handleSubmit}>
@@ -214,7 +261,7 @@ export default function Hero() {
                   </div>
                 </div>
                 <br />
-                <button type="submit">Create Calendar Link</button>
+                <button type="submit">{loading ? "Loading..." : "Create Calendar Link"}</button>
               </form>
             )}
           </div>
