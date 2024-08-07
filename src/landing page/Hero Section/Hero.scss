@@ -149,10 +149,74 @@
       .right {
         width: 50%;
         background: #fff;
-        height: fit-content;
+        height: 100%;
+
         .form {
           width: 100%;
           padding: 2em;
+          height: 100% !important;
+
+          .title {
+            font-family: 'Space Grotesk';
+            font-size: 2rem;
+            text-align: center;
+          }
+
+          .desc {
+            font-size: 1.2rem;
+          }
+
+          .final-link {
+            display: flex;
+            align-items: center;
+            padding: 0.5em 1em;
+            width: 100%;
+            border-radius: 0.25em;
+            border: none;
+            outline: none;
+            margin-top: 1em;
+            border: 3px solid rgb(0, 0, 0);
+            position: relative;
+
+            h2 {
+            font-family: "Space Grotesk";
+            font-size: 1.2rem;
+            font-weight: 800;
+            }
+
+            button {
+              padding: 0;
+              width: 20%;
+              position: absolute;
+              right: 5px;
+              top: 50%;
+              height: 80%;
+              transform: translate(0, -50%);
+              font-size: 1rem !important;
+            }
+          }
+
+          .or-component {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            font-family: 'Space Grotesk';
+            margin-top: 1em;
+            .line {
+              width: 40%;
+              height: 3px;
+              background: #000;
+              border-radius: 100px;
+            }
+
+            span {
+              background: #000;
+              color: #fff;
+              padding: .25em .5em;
+              border-radius: .25em;
+              width: 20%;
+            }
+          }
 
           button {
             background: #000;

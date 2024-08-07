@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import JSConfetti from "js-confetti";
 import "./Hero.scss";
 import Logo from "../../assets/home page/logo.png";
 import Pointer from "../../assets/home page/pointer.png";
@@ -8,17 +9,6 @@ import Outlook from "../../assets/home page/calender logo/outlook.png";
 import Banner from "../../assets/home page/banner.png";
 import Arrow from "../../assets/home page/arrow.png";
 
-// Example list of timezones (you can expand this list)
-const timezones = [
-  "UTC",
-  "Europe/London",
-  "America/New_York",
-  "America/Los_Angeles",
-  "Asia/Tokyo",
-  "Australia/Sydney",
-  // Add more timezones as needed
-];
-
 export default function Hero() {
   const [formData, setFormData] = useState({
     eventTitle: "",
@@ -26,19 +16,14 @@ export default function Hero() {
     eventStartTime: "",
     eventEndTime: "",
     eventLocation: "",
-    eventTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Default to user's timezone
+    eventTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     meetingLink: "",
     eventDescription: "",
     customMeetingLink: "",
   });
 
-  useEffect(() => {
-    // Update the timezone in state if needed
-    setFormData((prev) => ({
-      ...prev,
-      eventTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    }));
-  }, []);
+  const [submitted, setSubmitted] = useState(false);
+  const [jsConfetti] = useState(new JSConfetti());
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +33,17 @@ export default function Hero() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
-    // Add your form submission logic here
+    // Trigger confetti
+    jsConfetti.addConfetti({
+      confettiColors: ['#FF0000', '#00FF00', '#0000FF'], // Adjust colors if needed
+      confettiRadius: 6, // Size of the confetti pieces
+      confettiNumber: 500, // Number of confetti pieces
+      confettiLifetime: 0.7, // Duration of the confetti (in seconds)
+    });
+    // Show thank you message
+    setSubmitted(true);
+    // Scroll to top of the page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -64,7 +59,7 @@ export default function Hero() {
         </ul>
         <button>
           <img src={Pointer} alt="Pointer" />
-          Register Now !!
+          Visit Dashboard
           <img src={Arrow} alt="Arrow" />
         </button>
       </nav>
@@ -95,117 +90,133 @@ export default function Hero() {
             <img src={Banner} alt="Banner" />
           </div>
           <div className="right">
-            <form className="form" onSubmit={handleSubmit}>
-              <div className="dual">
+            {submitted ? (
+              <div className="form">
+                <h2 className="title">Copy Your Calendar Link</h2>
+                <p className="desc">Share your event landing page on social media.</p>
+                <div className="final-link">
+                  <h2>https://cal.et/oqous8eb</h2>
+                  <button>Copy Link</button>
+                </div>
+                <div className="or-component">
+                  <div className="line"></div>
+                  <span>Direct Links</span>
+                  <div className="line"></div>
+                </div>
+
+               
+
+                  
+              </div>
+            ) : (
+              <form className="form" onSubmit={handleSubmit}>
+                <div className="dual">
+                  <div className="input">
+                    <label htmlFor="eventTitle">Enter Event Title</label>
+                    <input
+                      type="text"
+                      placeholder="Enter Event Name"
+                      name="eventTitle"
+                      value={formData.eventTitle}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="input">
+                    <label htmlFor="hostName">Enter Host Name</label>
+                    <input
+                      type="text"
+                      placeholder="Enter Host Name"
+                      name="hostName"
+                      value={formData.hostName}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <br />
+                <div className="dual">
+                  <div className="input date-picker">
+                    <label htmlFor="eventStartTime">Event Start Time</label>
+                    <input
+                      type="datetime-local"
+                      name="eventStartTime"
+                      value={formData.eventStartTime}
+                      onChange={handleChange}
+                      onClick={(e) => e.target.showPicker()}
+                    />
+                  </div>
+                  <div className="input date-picker">
+                    <label htmlFor="eventEndTime">Event End Time</label>
+                    <input
+                      type="datetime-local"
+                      name="eventEndTime"
+                      value={formData.eventEndTime}
+                      onChange={handleChange}
+                      onClick={(e) => e.target.showPicker()}
+                    />
+                  </div>
+                </div>
+                <br />
+                <div className="dual">
+                  <div className="input">
+                    <label htmlFor="eventLocation">Enter Event Location</label>
+                    <input
+                      type="text"
+                      placeholder="Enter Event Location"
+                      name="eventLocation"
+                      value={formData.eventLocation}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="input">
+                    <label htmlFor="eventTimezone">Enter Event Timezone</label>
+                    <input
+                      type="text"
+                      placeholder="Enter Event Timezone"
+                      name="eventTimezone"
+                      value={formData.eventTimezone}
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+                <br />
                 <div className="input">
-                  <label htmlFor="eventTitle">Enter Event Title</label>
+                  <label htmlFor="meetingLink">Enter Meeting Link (Optional)</label>
                   <input
                     type="text"
-                    placeholder="Enter Event Name"
-                    name="eventTitle"
-                    value={formData.eventTitle}
+                    placeholder="Enter Meeting Link"
+                    name="meetingLink"
+                    value={formData.meetingLink}
                     onChange={handleChange}
                   />
                 </div>
+                <br />
                 <div className="input">
-                  <label htmlFor="hostName">Enter Host Name</label>
-                  <input
-                    type="text"
-                    placeholder="Enter Host Name"
-                    name="hostName"
-                    value={formData.hostName}
+                  <label htmlFor="eventDescription">Enter Event Description</label>
+                  <textarea
+                    placeholder="Enter Event Description"
+                    name="eventDescription"
+                    value={formData.eventDescription}
                     onChange={handleChange}
-                  />
+                  ></textarea>
                 </div>
-              </div>
-              <br />
-              <div className="dual">
-                <div className="input date-picker">
-                  <label htmlFor="eventStartTime">Event Start Time</label>
-                  <input
-                    type="date"
-                    name="eventStartTime"
-                    value={formData.eventStartTime}
-                    onChange={handleChange}
-                    onClick={(e) => e.target.showPicker()}
-                  />
-                </div>
-                <div className="input date-picker">
-                  <label htmlFor="eventEndTime">Event End Time</label>
-                  <input
-                    type="date"
-                    name="eventEndTime"
-                    value={formData.eventEndTime}
-                    onChange={handleChange}
-                    onClick={(e) => e.target.showPicker()}
-                  />
-                </div>
-              </div>
-              <br />
-              <div className="dual">
+                <br />
                 <div className="input">
-                  <label htmlFor="eventLocation">Enter Event Location</label>
-                  <input
-                    type="text"
-                    placeholder="Enter Event Location"
-                    name="eventLocation"
-                    value={formData.eventLocation}
-                    onChange={handleChange}
-                  />
+                  <label htmlFor="customMeetingLink">Customize Meeting Link</label>
+                  <div className="link">
+                    <span>calender.io/</span>
+                    <input
+                      type="text"
+                      placeholder="My Meeting"
+                      name="customMeetingLink"
+                      value={formData.customMeetingLink}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
-                <div className="input">
-                  <label htmlFor="eventTimezone">Enter Event Timezone</label>
-                  <select
-                    name="eventTimezone"
-                    value={formData.eventTimezone}
-                    onChange={handleChange}
-                  >
-                    {timezones.map((timezone) => (
-                      <option key={timezone} value={timezone}>
-                        {timezone}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <br />
-              <div className="input">
-                <label htmlFor="meetingLink">Enter Meeting Link (Optional)</label>
-                <input
-                  type="text"
-                  placeholder="Enter Meeting Link"
-                  name="meetingLink"
-                  value={formData.meetingLink}
-                  onChange={handleChange}
-                />
-              </div>
-              <br />
-              <div className="input">
-                <label htmlFor="eventDescription">Enter Event Description</label>
-                <textarea
-                  placeholder="Enter Event Description"
-                  name="eventDescription"
-                  value={formData.eventDescription}
-                  onChange={handleChange}
-                ></textarea>
-              </div>
-              <br />
-              <div className="input">
-                <label htmlFor="customMeetingLink">Customize Meeting Link</label>
-                <div className="link">
-                  <span>calender.io/</span>
-                  <input
-                    type="text"
-                    placeholder="My Meeting"
-                    name="customMeetingLink"
-                    value={formData.customMeetingLink}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-              <br />
-              <button type="submit">Create Calendar Link</button>
-            </form>
+                <br />
+                <button type="submit">Create Calendar Link</button>
+              </form>
+            )}
           </div>
         </div>
       </main>
