@@ -13,8 +13,8 @@ export default function Hero() {
   const [formData, setFormData] = useState({
     eventTitle: "",
     hostName: "",
-    eventStartTime: "",
-    eventEndTime: "",
+    eventStartTime: new Date().toISOString().slice(0, 16),
+    eventEndTime: new Date(new Date().getTime() + 30 * 60000).toISOString().slice(0, 16),
     eventLocation: "",
     eventTimezone: "",
     meetingLink: "",
@@ -101,7 +101,7 @@ export default function Hero() {
     <div className="hero-section">
       <div className="gradient"></div>
       <nav>
-        <img src={Logo} alt="Logo" />
+        <img src={Logo} alt="Logo" className="logo" />
         <ul>
           <li>Create Event</li>
           <li>Dashboard</li>
@@ -111,7 +111,7 @@ export default function Hero() {
         <button>
           <img src={Pointer} alt="Pointer" />
           Visit Dashboard
-          <img src={Arrow} alt="Arrow" />
+          <img className="arrow" src={Arrow} alt="Arrow" />
         </button>
       </nav>
       <main>
@@ -119,7 +119,14 @@ export default function Hero() {
           Effortlessly Create, Share & Manage <br />
           <span>Event Links</span> With Your Audience
         </h1>
+
+        <h1 className="mobile">
+          Effortlessly Create, Share & Manage &nbsp;
+          <span>Event Links</span> 
+        </h1>
+
         <p>Get your events in their calendars & diaries right now !!</p>
+        <p className="mobile">Get your events in your followers digital calendar or diary ASAP !!</p>
         <div className="calender-logos">
           <div className="calender">
             <img className="google" src={Google} alt="Google" />
@@ -138,7 +145,7 @@ export default function Hero() {
         </div>
         <div className="banner">
           <div className="left">
-            <img src={Banner} alt="Banner" />
+            {/* <img src={Banner} alt="Banner" /> */}
           </div>
           <div className="right">
             {submitted ? (
@@ -179,9 +186,8 @@ export default function Hero() {
                     />
                   </div>
                 </div>
-                <br />
                 <div className="dual">
-                  <div className="input date-picker">
+                  <div className="input">
                     <label htmlFor="eventStartTime">Event Start Time</label>
                     <input
                       type="datetime-local"
@@ -191,7 +197,7 @@ export default function Hero() {
                       onClick={(e) => e.target.showPicker()}
                     />
                   </div>
-                  <div className="input date-picker">
+                  <div className="input">
                     <label htmlFor="eventEndTime">Event End Time</label>
                     <input
                       type="datetime-local"
@@ -202,7 +208,6 @@ export default function Hero() {
                     />
                   </div>
                 </div>
-                <br />
                 <div className="dual">
                   <div className="input">
                     <label htmlFor="eventLocation">Enter Event Location</label>
@@ -225,7 +230,6 @@ export default function Hero() {
                     />
                   </div>
                 </div>
-                <br />
                 <div className="input">
                   <label htmlFor="meetingLink">Enter Meeting Link (Optional)</label>
                   <input
@@ -236,7 +240,6 @@ export default function Hero() {
                     onChange={handleChange}
                   />
                 </div>
-                <br />
                 <div className="input">
                   <label htmlFor="eventDescription">Enter Event Description</label>
                   <textarea
@@ -246,8 +249,7 @@ export default function Hero() {
                     onChange={handleChange}
                   ></textarea>
                 </div>
-                <br />
-                <div className="input">
+                <div className="input custom">
                   <label htmlFor="customMeetingLink">Customize Meeting Link</label>
                   <div className="link">
                     <span>calender.io/</span>
@@ -260,7 +262,6 @@ export default function Hero() {
                     />
                   </div>
                 </div>
-                <br />
                 <button type="submit">{loading ? "Loading..." : "Create Calendar Link"}</button>
               </form>
             )}
