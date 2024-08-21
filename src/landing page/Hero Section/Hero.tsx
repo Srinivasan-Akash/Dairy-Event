@@ -1,3 +1,4 @@
+import { storeEventData } from "../../appwrite/functions/storeEventData";
 import { useState, useEffect } from "react";
 import JSConfetti from "js-confetti";
 import "./Hero.scss";
@@ -103,6 +104,19 @@ export default function Hero() {
       setLoading(false);
       setSubmitted(true);
 
+      await storeEventData({
+        event_title: formData.eventTitle,
+        host_name: formData.hostName,
+        start_date_time: formData.eventStartTime,
+        end_date_time: formData.eventEndTime,
+        event_timezone: formData.eventTimezone,
+        event_location: formData.eventLocation,
+        meeting_link: formData.meetingLink,
+        event_desc: formData.eventDescription,
+        shareable_event_link: result.links.event_page,
+      });
+
+
       // Trigger confetti
       jsConfetti.addConfetti({
         confettiColors: ['#FF0000', '#00FF00', '#0000FF'], // Adjust colors if needed
@@ -166,7 +180,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="banner">
-          <div className="left">
+          <div className={submitted ? "left min-height": "left"}>
             {/* <img src={Banner} alt="Banner" /> */}
           </div>
           <div className="right">
