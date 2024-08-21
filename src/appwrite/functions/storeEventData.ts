@@ -10,7 +10,7 @@ export async function storeEventData(data: {
     event_location: string;
     meeting_link: string;
     event_desc: string;
-    shareable_event_link: string;
+    add_to_calandar_links: string;
 }): Promise<string> {
     try {
         const promise = await databases.createDocument(

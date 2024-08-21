@@ -9,6 +9,7 @@ import Apple from "../../assets/home page/calender logo/apple.png";
 import Outlook from "../../assets/home page/calender logo/outlook.png";
 import Arrow from "../../assets/home page/arrow.png";
 import { account } from "../../appwrite/appwrite.config";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   const [formData, setFormData] = useState({
@@ -77,53 +78,69 @@ export default function Hero() {
     setLoading(true);
 
     const eventPayload = {
-        title: formData.eventTitle,
-        start: formData.eventStartTime,
-        end: formData.eventEndTime,
-        description: formData.eventDescription,
-        timezone: formData.eventTimezone,
-        location: formData.eventLocation,
+      title: formData.eventTitle,
+      start: formData.eventStartTime,
+      end: formData.eventEndTime,
+      description: formData.eventDescription,
+      timezone: formData.eventTimezone,
+      location: formData.eventLocation,
     };
 
     try {
-        console.log(eventPayload);
+      console.log(eventPayload);
 
-        // Store event data and get document ID
-        const docId = await storeEventData({
-            event_title: formData.eventTitle,
-            host_name: formData.hostName,
-            start_date_time: formData.eventStartTime,
-            end_date_time: formData.eventEndTime,
-            event_timezone: formData.eventTimezone,
-            event_location: formData.eventLocation,
-            meeting_link: formData.meetingLink,
-            event_desc: formData.eventDescription,
-            shareable_event_link: "", // Initially empty
-        });
+      // Fetch meeting link from external API
+      const meetingResponse = await fetch("https://calndr.link/api/events", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventPayload),
+      });
 
-        // Construct event link
-        const currentURL = window.location.origin;
-        const constructedEventLink = `${currentURL}/${docId}`;
+      if (!meetingResponse.ok) {
+        throw new Error(`HTTP error! status: ${meetingResponse.status}`);
+      }
 
-        setEventLink(constructedEventLink);
-        setLoading(false);
-        setSubmitted(true);
+      const meetingResult = await meetingResponse.json();
+      console.log(meetingResult)
 
-        // Trigger confetti
-        jsConfetti.addConfetti({
-            confettiColors: ['#FF0000', '#00FF00', '#0000FF'],
-            confettiRadius: 6,
-            confettiNumber: 500,
-        });
+      // Store event data and get document ID
+      const docId = await storeEventData({
+        event_title: formData.eventTitle,
+        host_name: formData.hostName,
+        start_date_time: formData.eventStartTime,
+        end_date_time: formData.eventEndTime,
+        event_timezone: formData.eventTimezone,
+        event_location: formData.eventLocation,
+        meeting_link: formData.meetingLink, // Store the meeting link obtained from the external API
+        event_desc: formData.eventDescription,
+        add_to_calandar_links: JSON.stringify(meetingResult.links) // Initially empty
+      });
 
-        // Scroll to top of the page
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Construct event link
+      const currentURL = window.location.origin;
+      const constructedEventLink = `${currentURL}/${docId}`;
+
+      setEventLink(constructedEventLink);
+      setLoading(false);
+      setSubmitted(true);
+
+      // Trigger confetti
+      jsConfetti.addConfetti({
+        confettiColors: ['#FF0000', '#00FF00', '#0000FF'],
+        confettiRadius: 6,
+        confettiNumber: 500,
+      });
+
+      // Scroll to top of the page
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (error) {
-        console.error("Error creating event:", error);
-        setLoading(false);
+      console.error("Error creating event:", error);
+      setLoading(false);
     }
-};
+  };
 
   return (
     <div className="hero-section">
@@ -136,11 +153,13 @@ export default function Hero() {
           <li>About</li>
           <li>Contact Us</li>
         </ul>
-        <button>
-          <img src={Pointer} alt="Pointer" />
-          Visit Dashboard
-          <img className="arrow" src={Arrow} alt="Arrow" />
-        </button>
+        <Link to={"/dashboard"}>
+          <button>
+            <img src={Pointer} alt="Pointer" />
+            Visit Dashboard
+            <img className="arrow" src={Arrow} alt="Arrow" />
+          </button>
+        </Link>
       </nav>
       <main>
         <h1>
@@ -172,7 +191,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="banner">
-          <div className={submitted ? "left min-height": "left"}>
+          <div className={submitted ? "left min-height" : "left"}>
             {/* <img src={Banner} alt="Banner" /> */}
           </div>
           <div className="right">
