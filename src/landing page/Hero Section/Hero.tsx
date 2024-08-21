@@ -6,8 +6,8 @@ import Pointer from "../../assets/home page/pointer.png";
 import Google from "../../assets/home page/calender logo/google.png";
 import Apple from "../../assets/home page/calender logo/apple.png";
 import Outlook from "../../assets/home page/calender logo/outlook.png";
-import Banner from "../../assets/home page/banner.png";
 import Arrow from "../../assets/home page/arrow.png";
+import { account } from "../../appwrite/appwrite.config";
 
 export default function Hero() {
   const [formData, setFormData] = useState({
@@ -26,6 +26,7 @@ export default function Hero() {
   const [loading, setLoading] = useState(false);
   const [eventLink, setEventLink] = useState("");
   const [jsConfetti] = useState(new JSConfetti());
+  const [isSessionReady, setIsSessionReady] = useState(false); // Track session status
 
   useEffect(() => {
     const fetchTimezone = async () => {
@@ -42,6 +43,27 @@ export default function Hero() {
     };
 
     fetchTimezone();
+  }, []);
+
+  useEffect(() => {
+    const loginAnonymously = async () => {
+      try {
+        const session = await account.getSession("current");
+        console.log("Existing session:", session);
+        setIsSessionReady(true); // Session is ready
+      } catch (error) {
+        try {
+          const response = await account.createAnonymousSession();
+          console.log("New session created:", response);
+          setIsSessionReady(true); // Session is ready
+        } catch (error) {
+          console.error("Failed to create a session:", error);
+          setIsSessionReady(false); // Session creation failed
+        }
+      }
+    };
+
+    loginAnonymously();
   }, []);
 
   const handleChange = (e) => {
@@ -122,7 +144,7 @@ export default function Hero() {
 
         <h1 className="mobile">
           Effortlessly Create, Share & Manage &nbsp;
-          <span>Event Links</span> 
+          <span>Event Links</span>
         </h1>
 
         <p>Get your events in their calendars & diaries right now !!</p>
@@ -241,7 +263,7 @@ export default function Hero() {
                   />
                 </div>
                 <div className="input">
-                  <label htmlFor="eventDescription">Enter Event Description</label>
+                  <label htmlFor="eventDescription">Enter Event Description (Optional)</label>
                   <textarea
                     placeholder="Enter Event Description"
                     name="eventDescription"
@@ -249,20 +271,9 @@ export default function Hero() {
                     onChange={handleChange}
                   ></textarea>
                 </div>
-                <div className="input custom">
-                  <label htmlFor="customMeetingLink">Customize Meeting Link</label>
-                  <div className="link">
-                    <span>calender.io/</span>
-                    <input
-                      type="text"
-                      placeholder="My Meeting"
-                      name="customMeetingLink"
-                      value={formData.customMeetingLink}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-                <button type="submit">{loading ? "Loading..." : "Create Calendar Link"}</button>
+                <button type="submit" disabled={!isSessionReady || loading}>
+                  {loading ? "Creating Calendar Link..." : "Create Calendar Link"}
+                </button>
               </form>
             )}
           </div>
