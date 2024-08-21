@@ -67,12 +67,12 @@ export default function Hero() {
     loginAnonymously();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
 
@@ -222,7 +222,7 @@ export default function Hero() {
                       name="eventStartTime"
                       value={formData.eventStartTime}
                       onChange={handleChange}
-                      onClick={(e) => e.target.showPicker()}
+                      onClick={(e: any) => e.target.showPicker()}
                     />
                   </div>
                   <div className="input">
@@ -232,7 +232,7 @@ export default function Hero() {
                       name="eventEndTime"
                       value={formData.eventEndTime}
                       onChange={handleChange}
-                      onClick={(e) => e.target.showPicker()}
+                      onClick={(e: any) => e.target.showPicker()}
                     />
                   </div>
                 </div>
