@@ -11,7 +11,7 @@ export interface EventData {
     event_location: string;
     meeting_link: string;
     event_desc: string;
-    shareable_event_link: string;
+    add_to_calandar_links: string;
 }
 
 export async function getEventData(id: string): Promise<EventData | null> {
@@ -32,7 +32,7 @@ export async function getEventData(id: string): Promise<EventData | null> {
             event_location: document.event_location,
             meeting_link: document.meeting_link,
             event_desc: document.event_desc,
-            shareable_event_link: document.shareable_event_link,
+            add_to_calandar_links: document.add_to_calandar_links,
         };
 
         console.log("Event data retrieved successfully:", eventData);
