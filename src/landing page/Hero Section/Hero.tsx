@@ -77,61 +77,53 @@ export default function Hero() {
     setLoading(true);
 
     const eventPayload = {
-      title: formData.eventTitle,
-      start: formData.eventStartTime,
-      end: formData.eventEndTime,
-      description: formData.eventDescription,
-      timezone: formData.eventTimezone,
-      location: formData.eventLocation,
+        title: formData.eventTitle,
+        start: formData.eventStartTime,
+        end: formData.eventEndTime,
+        description: formData.eventDescription,
+        timezone: formData.eventTimezone,
+        location: formData.eventLocation,
     };
 
     try {
-      console.log(eventPayload);
-      const response = await fetch("https://calndr.link/api/events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(eventPayload),
-      });
+        console.log(eventPayload);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+        // Store event data and get document ID
+        const docId = await storeEventData({
+            event_title: formData.eventTitle,
+            host_name: formData.hostName,
+            start_date_time: formData.eventStartTime,
+            end_date_time: formData.eventEndTime,
+            event_timezone: formData.eventTimezone,
+            event_location: formData.eventLocation,
+            meeting_link: formData.meetingLink,
+            event_desc: formData.eventDescription,
+            shareable_event_link: "", // Initially empty
+        });
 
-      const result = await response.json();
-      setEventLink(result.links.event_page);
-      setLoading(false);
-      setSubmitted(true);
+        // Construct event link
+        const currentURL = window.location.origin;
+        const constructedEventLink = `${currentURL}/${docId}`;
 
-      await storeEventData({
-        event_title: formData.eventTitle,
-        host_name: formData.hostName,
-        start_date_time: formData.eventStartTime,
-        end_date_time: formData.eventEndTime,
-        event_timezone: formData.eventTimezone,
-        event_location: formData.eventLocation,
-        meeting_link: formData.meetingLink,
-        event_desc: formData.eventDescription,
-        shareable_event_link: result.links.event_page,
-      });
+        setEventLink(constructedEventLink);
+        setLoading(false);
+        setSubmitted(true);
 
+        // Trigger confetti
+        jsConfetti.addConfetti({
+            confettiColors: ['#FF0000', '#00FF00', '#0000FF'],
+            confettiRadius: 6,
+            confettiNumber: 500,
+        });
 
-      // Trigger confetti
-      jsConfetti.addConfetti({
-        confettiColors: ['#FF0000', '#00FF00', '#0000FF'], // Adjust colors if needed
-        confettiRadius: 6, // Size of the confetti pieces
-        confettiNumber: 500, // Number of confetti pieces
-      });
-
-      // Scroll to top of the page
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Scroll to top of the page
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (error) {
-      console.error("Error creating event:", error);
-      setLoading(false);
+        console.error("Error creating event:", error);
+        setLoading(false);
     }
-  };
+};
 
   return (
     <div className="hero-section">
