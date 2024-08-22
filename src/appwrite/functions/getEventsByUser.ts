@@ -35,6 +35,7 @@ export async function getEventsByUser(userID: string): Promise<EventData[] | nul
             meeting_link: document.meeting_link,
             event_desc: document.event_desc,
             add_to_calandar_links: document.add_to_calandar_links,
+            $id: document.$id
         }));
 
         console.log("Events retrieved successfully:", events);
