@@ -29,6 +29,7 @@ export default function Hero() {
   const [eventLink, setEventLink] = useState("");
   const [jsConfetti] = useState(new JSConfetti());
   const [isSessionReady, setIsSessionReady] = useState(false); // Track session status
+  const [user, setUser] = useState<{$id: string} | null>(null)
 
   useEffect(() => {
     const fetchTimezone = async () => {
@@ -53,6 +54,7 @@ export default function Hero() {
         const session = await account.getSession("current");
         console.log("Existing session:", session);
         setIsSessionReady(true); // Session is ready
+        setUser(session)
       } catch (error) {
         try {
           const response = await account.createAnonymousSession();
@@ -115,7 +117,8 @@ export default function Hero() {
         event_location: formData.eventLocation,
         meeting_link: formData.meetingLink, // Store the meeting link obtained from the external API
         event_desc: formData.eventDescription,
-        add_to_calandar_links: JSON.stringify(meetingResult.links) // Initially empty
+        add_to_calandar_links: JSON.stringify(meetingResult.links),
+        created_by: user?.$id || ""
       });
 
       // Construct event link

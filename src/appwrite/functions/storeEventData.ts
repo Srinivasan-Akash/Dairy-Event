@@ -11,6 +11,7 @@ export async function storeEventData(data: {
     meeting_link: string;
     event_desc: string;
     add_to_calandar_links: string;
+    created_by: string;
 }): Promise<string> {
     try {
         const promise = await databases.createDocument(
