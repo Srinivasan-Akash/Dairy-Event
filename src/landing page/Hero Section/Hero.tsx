@@ -151,10 +151,10 @@ export default function Hero() {
       <nav>
         <img src={Logo} alt="Logo" className="logo" />
         <ul>
-          <li>Create Event</li>
-          <li>Dashboard</li>
-          <li>About</li>
-          <li>Contact Us</li>
+          <li><Link to={"/"}>Create Event</Link></li>
+          <li><Link to={"/dashboard"}>Dashboard</Link></li>
+          <li><Link to={"/about"}>About</Link></li>
+          <li><a href={"https://mail.google.com/mail/u/0/?fs=1&to=kota.baby.work@gmail.com&tf=cm"}>Contact Us</a></li>
         </ul>
         <Link to={"/dashboard"}>
           <button>

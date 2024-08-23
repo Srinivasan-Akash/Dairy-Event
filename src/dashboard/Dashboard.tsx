@@ -9,6 +9,7 @@ import { getEventsByUser, EventData } from "../appwrite/functions/getEventsByUse
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteEvent } from "../appwrite/functions/deleteEvent";
+import "../landing page/Hero Section/Hero.scss"
 
 export default function Dashboard() {
   const [isSessionReady, setIsSessionReady] = useState(false);
@@ -20,9 +21,9 @@ export default function Dashboard() {
     const day = date.getDate();
     const suffix = day % 10 === 1 && day !== 11 ? 'st' : day % 10 === 2 && day !== 12 ? 'nd' : day % 10 === 3 && day !== 13 ? 'rd' : 'th';
     return date.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
-               .replace(/(\d{1,2})(?=,)/, day + suffix)
-               .replace(',', '')
-               .replace(/([ap]m)/i, match => match.toUpperCase());
+      .replace(/(\d{1,2})(?=,)/, day + suffix)
+      .replace(',', '')
+      .replace(/([ap]m)/i, match => match.toUpperCase());
   };
 
   useEffect(() => {
@@ -79,16 +80,19 @@ export default function Dashboard() {
       <div className="gradient"></div>
       <nav>
         <img src={Logo} alt="Logo" className="logo" />
+        <ul>
+          <li><Link to={"/"}>Create Event</Link></li>
+          <li><Link to={"/dashboard"}>Dashboard</Link></li>
+          <li><Link to={"/about"}>About</Link></li>
+          <li><a href={"https://mail.google.com/mail/u/0/?fs=1&to=kota.baby.work@gmail.com&tf=cm"}>Contact Us</a></li>
+        </ul>
 
-        <div className="right-nav">
-          <input type="text" placeholder="Search For Your Event" />
-          <Link to={"/dashboard"}>
-            <button>
-              <img src={Pointer} alt="Pointer" />
-              Create Event
-            </button>
-          </Link>
-        </div>
+        <Link to={"/"}>
+          <button>
+            <img src={Pointer} alt="Pointer" />
+            Create New Event
+          </button>
+        </Link>
       </nav>
 
       {isSessionReady ? (
@@ -117,9 +121,17 @@ export default function Dashboard() {
       )}
 
       <ToastContainer
+        style={{ width: "500px" }}
         position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
         theme="dark"
-        draggablePercent={30}
       />
     </div>
   );
