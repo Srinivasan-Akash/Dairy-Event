@@ -12,6 +12,7 @@ export interface EventData {
     meeting_link: string;
     event_desc: string;
     add_to_calandar_links: string;
+    $id: string
 }
 
 // Function to get all documents created by a specific user

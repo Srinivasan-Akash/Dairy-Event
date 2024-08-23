@@ -1,5 +1,4 @@
 import { databases } from "../../appwrite/appwrite.config"; // Import the database instance
-import { ID, Models } from "appwrite";
 
 // Define a TypeScript interface for the event data
 export interface EventData {

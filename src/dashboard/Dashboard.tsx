@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Link } from "react-router-dom";
 import "./dashboard.scss";
 import Logo from "../assets/home page/logo.png";
@@ -14,7 +15,7 @@ import "../landing page/Hero Section/Hero.scss"
 export default function Dashboard() {
   const [isSessionReady, setIsSessionReady] = useState(false);
   const [user, setUser] = useState<{ $id: string } | null>(null);
-  const [events, setEvents] = useState<EventData[] | null>(null);
+  const [events, setEvents] = useState<EventData[] | any>();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -65,7 +66,7 @@ export default function Dashboard() {
     const deletePromise = deleteEvent(eventId)
       .then(() => {
         // Remove the event from local state on success
-        setEvents(events.filter(event => event.$id !== eventId));
+        setEvents(events.filter((event: EventData) => event.$id !== eventId));
       });
 
     toast.promise(deletePromise, {
@@ -98,7 +99,7 @@ export default function Dashboard() {
       {isSessionReady ? (
         <div className="grid">
           {events && events.length > 0 ? (
-            events.map((event) => (
+            events.map((event: any) => (
               <div className="card" key={event.$id}>
                 <h2 className="date">{"Event On " + formatDate(event.start_date_time)}</h2>
                 <h1>{event.event_title}</h1>
