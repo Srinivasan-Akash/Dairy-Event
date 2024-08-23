@@ -1,0 +1,52 @@
+.about {
+    font-family: "Poppins";
+height: 100%;
+min-height: 100vh;
+padding-bottom: 1em;
+background: linear-gradient(50deg, #fff, #ffedad);
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 80rem;
+  margin: auto;
+  padding: 1em 0;
+
+  img {
+    height: 45px;
+  }
+
+  ul {
+    list-style-type: none;
+    display: flex;
+    gap: 2em;
+
+    li {
+      font-size: 1rem;
+      font-family: "Poppins";
+    }
+  }
+
+  button {
+    background: #ef4444;
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5em 1em;
+    font-family: "Poppins";
+    gap: 0.5em;
+    cursor: pointer;
+    border: 2px solid #000;
+    border-radius: 5px;
+    position: relative;
+
+    img:first-child {
+      width: 15px;
+      height: auto;
+    }
+  }
+}
+
+}
