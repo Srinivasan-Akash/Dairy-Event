@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./dashboard.scss";
 import Logo from "../assets/home page/logo.png";
 import Pointer from "../assets/home page/pointer.png";
-import { Settings, Trash2 } from "lucide-react";
+import { Copy, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { account } from "../appwrite/appwrite.config";
 import { getEventsByUser, EventData } from "../appwrite/functions/getEventsByUser";
@@ -105,8 +105,11 @@ export default function Dashboard() {
                 <h1>{event.event_title}</h1>
                 <p>{event.event_desc}</p>
                 <div className="btns">
-                  <button className="createEvent">Copy Event Link</button>
-                  <button className="settings"><Settings /></button>
+                  <button className="createEvent">Convert To Recurring Event</button>
+                  <button className="settings" onClick={() => {
+                    toast.success("Copied Event Page Link. Time To Share !!")
+                    navigator.clipboard.writeText(`${window.location.origin}/${event.$id}`)
+                  }}><Copy /></button>
                   <button className="delete" onClick={() => handleDelete(event.$id)}>
                     <Trash2 />
                   </button>
@@ -118,7 +121,9 @@ export default function Dashboard() {
           )}
         </div>
       ) : (
-        <h1>Loading...</h1>
+        <div className="grid">
+          <h1>Loading...</h1>
+        </div>
       )}
 
       <ToastContainer
