@@ -12,6 +12,9 @@ export async function storeEventData(data: {
     event_desc: string;
     add_to_calandar_links: string;
     created_by: string;
+    calndr_event_id: string;
+    calndr_secret_id: string;
+    all_day: boolean
 }): Promise<string> {
     try {
         const promise = await databases.createDocument(

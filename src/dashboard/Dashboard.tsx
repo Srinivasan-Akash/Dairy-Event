@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { deleteEvent } from "../appwrite/functions/deleteEvent";
 import "../landing page/Hero Section/Hero.scss"
+import updateEvent from "../appwrite/functions/updateEvent";
 
 export default function Dashboard() {
   const [isSessionReady, setIsSessionReady] = useState(false);
@@ -76,6 +77,61 @@ export default function Dashboard() {
     });
   };
 
+  const handleEventConversion = (calndr_secret_id: string, calndr_event_id: string, document_id: string) => {
+    const eventPromise = new Promise<void>(async (resolve, reject) => {
+      try {
+        // Find the event in local state
+        const eventToUpdate = events.find((event: EventData) => event.calndr_event_id === calndr_event_id);
+        if (!eventToUpdate) {
+          toast.error("Event not found.");
+          return reject("Event not found.");
+        }
+
+        // Toggle the all_day property
+        const updatedAllDay = !eventToUpdate.all_day;
+
+        // Prepare the PUT request to update the event on Calndr
+        const response = await fetch(`https://calndr.link/api/events/${calndr_event_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            all_day: updatedAllDay,
+            secret: calndr_secret_id
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update event on Calndr.");
+        }
+
+        // Update local state with the new event data
+        setEvents((prevEvents: EventData[]) =>
+          prevEvents.map((event) =>
+            event.calndr_event_id === calndr_event_id ? { ...event, all_day: updatedAllDay } : event
+          )
+        );
+
+        // Update the Appwrite document with the new all_day value
+        await updateEvent(document_id, updatedAllDay);
+
+        resolve();
+      } catch (error) {
+        console.error("Error updating event:", error);
+        reject(error);
+      }
+    });
+
+    toast.promise(eventPromise, {
+      pending: "Updating event...",
+      success: "Event updated successfully!",
+      error: "Failed to update event.",
+    });
+  };
+
+
+
   return (
     <div className="dashboard">
       <div className="gradient"></div>
@@ -105,7 +161,10 @@ export default function Dashboard() {
                 <h1>{event.event_title}</h1>
                 <p>{event.event_desc}</p>
                 <div className="btns">
-                  <button className="createEvent">Convert To Recurring Event</button>
+                  <button className="createEvent" onClick={() => handleEventConversion(event.calndr_secret_id, event.calndr_event_id, event.$id)}>
+                    {event.all_day ? "Convert To One Time Event" : "Convert To Recurring Event"}
+                  </button>
+
                   <button className="settings" onClick={() => {
                     toast.success("Copied Event Page Link. Time To Share !!")
                     navigator.clipboard.writeText(`${window.location.origin}/${event.$id}`)

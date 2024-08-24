@@ -118,7 +118,10 @@ export default function Hero() {
         meeting_link: formData.meetingLink, // Store the meeting link obtained from the external API
         event_desc: formData.eventDescription,
         add_to_calandar_links: JSON.stringify(meetingResult.links),
-        created_by: user?.$id || ""
+        created_by: user?.$id || "",
+        calndr_event_id: meetingResult.data.id,
+        calndr_secret_id: meetingResult.data.secret,
+        all_day: meetingResult.data.all_day
       });
 
       // Construct event link

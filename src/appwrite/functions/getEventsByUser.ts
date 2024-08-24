@@ -3,7 +3,7 @@ import { Query, Models } from "appwrite"; // Import Query for filtering
 
 // Define a TypeScript interface for the event data
 export interface EventData {
-    event_title: string;
+    event_title: string
     host_name: string;
     start_date_time: string;
     end_date_time: string;
@@ -12,7 +12,10 @@ export interface EventData {
     meeting_link: string;
     event_desc: string;
     add_to_calandar_links: string;
-    $id: string
+    created_by: string;
+    calndr_event_id: string;
+    calndr_secret_id: string;
+    all_day: boolean
 }
 
 // Function to get all documents created by a specific user
@@ -25,22 +28,9 @@ export async function getEventsByUser(userID: string): Promise<EventData[] | nul
             [Query.equal("created_by", userID)]
         );
 
-        // Map the documents to the EventData type
-        const events: EventData[] = response.documents.map((document: Models.Document) => ({
-            event_title: document.event_title,
-            host_name: document.host_name,
-            start_date_time: document.start_date_time,
-            end_date_time: document.end_date_time,
-            event_timezone: document.event_timezone,
-            event_location: document.event_location,
-            meeting_link: document.meeting_link,
-            event_desc: document.event_desc,
-            add_to_calandar_links: document.add_to_calandar_links,
-            $id: document.$id
-        }));
-
-        console.log("Events retrieved successfully:", events);
-        return events;
+        console.log("Events retrieved successfully:",  response.documents);
+        // @ts-ignore
+        return response.documents as EventData[];
     } catch (error) {
         console.error("Failed to retrieve events:", error);
         return null;
