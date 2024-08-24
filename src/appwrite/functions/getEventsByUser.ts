@@ -1,5 +1,5 @@
 import { databases } from "../appwrite.config"; // Import the database instance
-import { Query, Models } from "appwrite"; // Import Query for filtering
+import { Query } from "appwrite"; // Import Query for filtering
 
 // Define a TypeScript interface for the event data
 export interface EventData {

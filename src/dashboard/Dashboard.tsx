@@ -66,7 +66,7 @@ export default function Dashboard() {
   const handleDelete = (eventId: string) => {
     const deletePromise = deleteEvent(eventId)
       .then(() => {
-        // Remove the event from local state on success
+        // @ts-ignore
         setEvents(events.filter((event: EventData) => event.$id !== eventId));
       });
 
@@ -141,7 +141,7 @@ export default function Dashboard() {
           <li><Link to={"/"}>Create Event</Link></li>
           <li><Link to={"/dashboard"}>Dashboard</Link></li>
           <li><Link to={"/about"}>About</Link></li>
-          <li><a href={"https://mail.google.com/mail/u/0/?fs=1&to=kota.baby.work@gmail.com&tf=cm"}>Contact Us</a></li>
+          <li><a href={"https://mail.google.com/mail/u/0/?fs=1&to=Emanuel.Pillay.Ep@gmail.com&tf=cm"}>Contact Us</a></li>
         </ul>
 
         <Link to={"/"}>
