@@ -18,7 +18,7 @@ export default function Hero() {
     eventStartTime: new Date().toISOString().slice(0, 16),
     eventEndTime: new Date(new Date().getTime() + 30 * 60000).toISOString().slice(0, 16),
     eventLocation: "",
-    eventTimezone: "",
+    eventTimezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     meetingLink: "",
     eventDescription: "",
     customMeetingLink: "",
@@ -30,23 +30,6 @@ export default function Hero() {
   const [jsConfetti] = useState(new JSConfetti());
   const [isSessionReady, setIsSessionReady] = useState(false); // Track session status
   const [user, setUser] = useState<{$id: string} | null>(null)
-
-  useEffect(() => {
-    const fetchTimezone = async () => {
-      try {
-        const response = await fetch("http://worldtimeapi.org/api/ip");
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setFormData((prevData) => ({ ...prevData, eventTimezone: data.timezone }));
-      } catch (error) {
-        console.error("Error fetching timezone:", error);
-      }
-    };
-
-    fetchTimezone();
-  }, []);
 
   useEffect(() => {
     const loginAnonymously = async () => {
@@ -84,7 +67,6 @@ export default function Hero() {
       start: formData.eventStartTime,
       end: formData.eventEndTime,
       description: formData.eventDescription,
-      timezone: formData.eventTimezone,
       location: formData.eventLocation,
     };
 
